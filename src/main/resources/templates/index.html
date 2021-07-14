@@ -4,9 +4,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
     <title>Document</title>
 </head>
 <body>
     home
+    <input type="button" value="fdsf" id="ii" onclick="">
+<script>
+    $(function(){
+        $('#ii').click(function(){
+            var data=JSON.stringify({"test":"test"}); 
+
+            $.ajax({
+                beforeSend: function (xhr) {
+                xhr.setRequestHeader("Content-type","application/json");
+                xhr.setRequestHeader("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3MiLCJpZCI6MSwiZXhwIjoxNjI2MjMxNDEzLCJ1c2VybmFtZSI6ImtpbUBraW0uY29tIn0.-vfMY_NAXNxB0RLqomEdfzkwxhyhE65Q6t30fOTyIaGC_RvpknMud7WbQp4xHSOqOABso-orIeHv-Jrg08eHgA");
+            },
+                type:"get",
+                url:"/auth3",
+                data :data,
+            success:function(data){
+                if(data!=null){
+                    alert(data);
+                }
+                else{
+                    alert('이메일인증 부탁드립니다');
+                  
+                }  
+            }
+            })    
+        })
+})
+   
+</script>
 </body>
 </html>
