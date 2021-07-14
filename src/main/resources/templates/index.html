@@ -10,31 +10,28 @@
 <body>
     home
     <input type="button" value="fdsf" id="ii" onclick="">
+    <input type="button" onclick="goNaverLogin()" value="네이버 로그인">
 <script>
-    $(function(){
-        $('#ii').click(function(){
-            var data=JSON.stringify({"test":"test"}); 
-
-            $.ajax({
-                beforeSend: function (xhr) {
-                xhr.setRequestHeader("Content-type","application/json");
-                xhr.setRequestHeader("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3MiLCJpZCI6MSwiZXhwIjoxNjI2MjMxNDEzLCJ1c2VybmFtZSI6ImtpbUBraW0uY29tIn0.-vfMY_NAXNxB0RLqomEdfzkwxhyhE65Q6t30fOTyIaGC_RvpknMud7WbQp4xHSOqOABso-orIeHv-Jrg08eHgA");
-            },
-                type:"get",
-                url:"/auth3",
-                data :data,
-            success:function(data){
-                if(data!=null){
-                    alert(data);
-                }
-                else{
-                    alert('이메일인증 부탁드립니다');
-                  
-                }  
-            }
-            })    
-        })
-})
+function doajax(url,data,contentType){
+    var xhr = new XMLHttpRequest(); //new로 생성
+    xhr.open('POST', url, true); //j쿼리 $ajax.({type,url},true가 비동기)
+    //xhr.setRequestHeader('Csrf-Token', csrf_token);
+    xhr.setRequestHeader("Content-Type",contentType);////이게없으면 psot전송불가 조금 찾았네
+    xhr.send(data); /// ajax data부분
+    return xhr;
+}
+function goNaverLogin(){
+    var xhr,url='/auth/naver',data=null;
+    var contentType="application/json";
+    xhr=doajax(url,data,contentType);
+    xhr.onload = function() { 
+        if(xhr.status==200){ // success:function(data)부분 통신 성공시 200반환
+        location.href=xhr.response;
+        }else{
+            alert('통신에 실패했습니다');
+        }
+    }  
+}
    
 </script>
 </body>

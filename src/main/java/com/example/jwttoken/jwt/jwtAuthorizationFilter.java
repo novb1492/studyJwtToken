@@ -43,8 +43,10 @@ public class jwtAuthorizationFilter extends BasicAuthenticationFilter {
             System.out.println("인증이 요청되는");
             userDto userDto=dao.findByEmail(username);
             principaldetail principaldetail=new principaldetail(userDto);
+
             System.out.println(userDto.getEmail());
             System.out.println(principaldetail.getAuthorities());
+            
             Authentication authentication=new UsernamePasswordAuthenticationToken(principaldetail, null,principaldetail.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             chain.doFilter(request, response);
