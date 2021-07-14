@@ -48,10 +48,10 @@ public class security extends WebSecurityConfigurerAdapter {
         .addFilter(corsFilter)
         .formLogin().disable()
         .httpBasic().disable()
-        .addFilter(new jwtAuthorizationFilter(authenticationManager(), dao))
+        //.addFilter(new jwtAuthorizationFilter(authenticationManager(), dao))
         .addFilter(new jwtLoginFilter(authenticationManager()))
         .authorizeRequests()
-        .antMatchers("/","/auth/**")////이 링크들은
+        .antMatchers("/","/auth/**","/login")////이 링크들은
         .permitAll()///허용한다
         .antMatchers("/api/v1/user")
         .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGE') or hasRole('ROLE_ADMIN')")

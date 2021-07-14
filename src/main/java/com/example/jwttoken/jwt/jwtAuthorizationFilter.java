@@ -37,7 +37,10 @@ public class jwtAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         String jwtToken=request.getHeader("Authorization").replace("Bearer ", "");
+        System.out.println(jwtToken+"토큰받음");
+
         String username=JWT.require(Algorithm.HMAC512("cos")).build().verify(jwtToken).getClaim("username").asString();
+        System.out.println(username+"토큰해제");
 
         if(username!=null){
             System.out.println("인증이 요청되는");

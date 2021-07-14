@@ -8,5 +8,13 @@
 </head>
 <body>
     auth2
+    <div sec:authorize="isAuthenticated()"><!--else문을 모르겠다-->
+        <div sec:authentication="name"></div>
+            <a href="/mypage">마이페이지</a>
+                <a href="/logout">로그아웃</a>
+                    <a href="/showreservationpage">예약내역</a>
+                    </div>
+                    <div th:text="${head}"></div>
+                 
 </body>
 </html>

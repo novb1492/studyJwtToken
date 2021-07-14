@@ -10,6 +10,7 @@
 <body>
     home
     <input type="button" value="fdsf" id="ii" onclick="">
+    <input type="button" onclick="doDo()" value="sdsd">
     <input type="button" onclick="goNaverLogin()" value="네이버 로그인">
 <script>
 function doajax(url,data,contentType){
@@ -20,6 +21,19 @@ function doajax(url,data,contentType){
     xhr.send(data); /// ajax data부분
     return xhr;
 }
+function doDo(){
+    var xhr,url='/login';
+    var data=JSON.stringify({"email":"kim@kim.com","pwd":"1111"});
+    var contentType="application/json";
+    xhr=doajax(url,data,contentType);
+    xhr.onload = function() { 
+        if(xhr.status==200){ // success:function(data)부분 통신 성공시 200반환
+        location.href=xhr.response;
+        }else{
+            alert('통신에 실패했습니다');
+        }
+    }  
+}
 function goNaverLogin(){
     var xhr,url='/auth/naver',data=null;
     var contentType="application/json";
@@ -27,6 +41,7 @@ function goNaverLogin(){
     xhr.onload = function() { 
         if(xhr.status==200){ // success:function(data)부분 통신 성공시 200반환
         location.href=xhr.response;
+        alert('sd');
         }else{
             alert('통신에 실패했습니다');
         }

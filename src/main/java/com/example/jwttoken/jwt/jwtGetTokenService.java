@@ -13,11 +13,12 @@ import org.springframework.stereotype.Service;
 public class jwtGetTokenService {
     
     public String getJwtToken(Authentication authResult) {
-        principaldetail principaldetail=(principaldetail)authResult.getPrincipal();
-                
+        
+        System.out.println("토큰 제작시작");
+        principaldetail principaldetail=(principaldetail)authResult.getPrincipal();  
         String jwtToken=JWT.create().withSubject("cos").withExpiresAt(new Date(System.currentTimeMillis()+(60000*10)))
         .withClaim("id",principaldetail.getUserDto().getId()).withClaim("username", principaldetail.getUserDto().getEmail()).sign(Algorithm.HMAC512("cos"));
-
+        
         return jwtToken;
     }
 }

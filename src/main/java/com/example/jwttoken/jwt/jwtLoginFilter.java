@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.FilterChain;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +26,6 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
     
     @Autowired
     private AuthenticationManager authenticationManager;
-
 
     public jwtLoginFilter(AuthenticationManager authenticationManager){
         this.authenticationManager=authenticationManager;
@@ -60,6 +60,7 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
         return null;
     }
 
+
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,Authentication authResult) throws IOException, ServletException {
                 System.out.println("토큰 제작시작");
@@ -70,6 +71,16 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
                 .withClaim("id",principaldetail.getUserDto().getId()).withClaim("username", principaldetail.getUserDto().getEmail()).sign(Algorithm.HMAC512("cos"));
         
                 response.setHeader("Authorization", "Bearer "+jwtToken);
+
+                RequestDispatcher dispatcher=request.getRequestDispatcher("/auth/home4"); 
+        
+                try {
+                    dispatcher.forward(request, response);
+                } catch (ServletException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
     }
     
 }

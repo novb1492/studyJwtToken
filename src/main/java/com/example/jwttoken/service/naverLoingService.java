@@ -1,9 +1,12 @@
 package com.example.jwttoken.service;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.auth0.jwt.JWT;
@@ -26,7 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class naverLoingService {
+public class naverLoingService   {
     
     private final String id="DrqDuzgTpM_sfreaZMly";
     private final String pwd="wCLQZ1kaQT";
@@ -59,7 +62,7 @@ public class naverLoingService {
          System.out.println(jsonObject+" token"); 
          return jsonObject;
      }
-     public void LoginNaver(JSONObject jsonObject,HttpServletResponse response) {
+     public void LoginNaver(JSONObject jsonObject,HttpServletRequest request,HttpServletResponse response) {
         headers.add("Authorization", "Bearer "+jsonObject.get("access_token"));
         HttpEntity<JSONObject>entity=new HttpEntity<JSONObject>(headers);
         try {
@@ -85,17 +88,23 @@ public class naverLoingService {
  
                }
     
-               Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, "1111"));
-               SecurityContextHolder.getContext().setAuthentication(authentication);
-               
+               UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(dto.getEmail()  , "1111");
+               Authentication authentication=authenticationManager.authenticate(authenticationToken);////토큰을 던지면 loadUserByUsername가 실행됨
                System.out.println("토큰 발급시작");
 
                String jwtToken=jwtGetTokenService.getJwtToken(authentication);
-              
-                String username=JWT.require(Algorithm.HMAC512("cos")).build().verify(jwtToken).getClaim("username").asString();
-                System.out.println(username+"토큰 해제");
-
-               response.setHeader("Authorization", "Bearer "+jwtToken);
+               System.out.println(jwtToken+" 토큰");
+            
+               RequestDispatcher dispatcher=request.getRequestDispatcher("/auth/auth"); 
+               request.setAttribute("test", jwtToken);
+               request.setAttribute("test2", "1111");
+                try {
+                    dispatcher.forward(request, response);
+                } catch (ServletException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("LoginNaver 오류가 발생 했습니다");
