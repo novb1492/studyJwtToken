@@ -2,13 +2,12 @@ package com.example.jwttoken.service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Date;
+
 
 import javax.servlet.http.HttpServletResponse;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.example.jwttoken.config.principaldetail;
 import com.example.jwttoken.config.security;
 import com.example.jwttoken.jwt.jwtGetTokenService;
 import com.example.jwttoken.model.naverDto;
@@ -87,6 +86,7 @@ public class naverLoingService {
                }
     
                Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, "1111"));
+               SecurityContextHolder.getContext().setAuthentication(authentication);
                
                System.out.println("토큰 발급시작");
 
