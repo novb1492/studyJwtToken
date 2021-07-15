@@ -51,5 +51,4 @@ public class controller {
         naverLoingService.LoginNaver(naverLoingService.getNaverToken(request.getParameter("code"), request.getParameter("state")),request,response);
         return "index";
     }
- 
 }
