@@ -42,9 +42,14 @@ public class controller {
     @RequestMapping("/auth/home4")
     public String name(HttpServletRequest request,HttpServletResponse response) {
         System.out.println("home4");
-        System.out.println(request.getParameter("test2"));
 
         return "auth2page";
+    }
+    @RequestMapping("/auth/navercallback")
+    public String naverLogin2(HttpServletRequest request,HttpServletResponse response) {
+        System.out.println("naverlogin요청");
+        naverLoingService.LoginNaver(naverLoingService.getNaverToken(request.getParameter("code"), request.getParameter("state")),request,response);
+        return "index";
     }
  
 }

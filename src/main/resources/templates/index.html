@@ -5,14 +5,83 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+    
     <title>Document</title>
 </head>
 <body>
     home
-    <input type="button" value="fdsf" id="ii" onclick="">
-    <input type="button" onclick="doDo()" value="sdsd">
+    <div sec:authorize="isAuthenticated()"><!--else문을 모르겠다-->
+        <div sec:authentication="name"></div>
+            <a href="/mypage">마이페이지</a>
+                <a href="/logout">로그아웃</a>
+                    <a href="/showreservationpage">예약내역</a>
+                    </div>
+                    <div id="test" th:value="${test}"></div>
+                    <div id="test2" value="test2"></div>
+    <input type="button" id="headtest" value="headtest">
+    <input type="button" id="listtest" value="listtest">
+    <input type="button" value="jsontest"  onclick="jsontest()">
+    <input type="button" onclick="doDo()" value="logintest">
     <input type="button" onclick="goNaverLogin()" value="네이버 로그인">
+    <input type="button" onclick="out()"value="ajaxtest">
 <script>
+$(function(){
+    $('#headtest').click(function(){
+        var head='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3MiLCJpZCI6NSwiZXhwIjoxNjI2MzI0OTc5LCJ1c2VybmFtZSI6Im5vdmExNDkyQG5hdmVyLmNvbSJ9.qABQr79BBW8sr3j2chsgu8_Vv00TpTOog67HZiQ4FGeTQSokw45eYbcJFfa6E8jk-K-nVO0oLG7U5dWQNjfMow';
+        console.log(head);
+        $.ajax({
+        type: "GET",
+        url: "/head",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization","Bearer " + head);
+        },
+        success: function (res) {
+            console.log(res);
+        }
+        });
+    })
+    $('#listtest').click(function(){
+        var list=[1,2];
+        alert(list[0]);
+        $.ajax({
+        type: "GET",
+        url: "/auth/listtest",
+        data:{
+            "list":list,
+            "test":"test"
+        },           
+        success: function (res) {
+            console.log(res);
+        }
+        });
+    })
+})
+    function out(){
+        $.ajax({
+            type:"post",
+            url:"/auth/auth5",
+            data:{
+                "test":"auth5test",
+            },
+            success:function(data){
+                alert(data);
+            }
+        })    
+    }
+function jsontest(){
+    var xhr,url='/auth/jsontest';
+    var data=JSON.stringify({"email":"kim@kim.com","pwd":"1111"});
+    var contentType="application/json";
+    xhr=doajax(url,data,contentType);
+    xhr.onload = function() { 
+        if(xhr.status==200){ // success:function(data)부분 통신 성공시 200반환
+            alert(xhr.response);
+        }else{
+            alert('통신에 실패했습니다');
+        }
+    }  
+}
+
 function doajax(url,data,contentType){
     var xhr = new XMLHttpRequest(); //new로 생성
     xhr.open('POST', url, true); //j쿼리 $ajax.({type,url},true가 비동기)
@@ -25,14 +94,8 @@ function doDo(){
     var xhr,url='/login';
     var data=JSON.stringify({"email":"kim@kim.com","pwd":"1111"});
     var contentType="application/json";
-    xhr=doajax(url,data,contentType);
-    xhr.onload = function() { 
-        if(xhr.status==200){ // success:function(data)부분 통신 성공시 200반환
-        location.href=xhr.response;
-        }else{
-            alert('통신에 실패했습니다');
-        }
-    }  
+    doajax(url,data,contentType);
+    
 }
 function goNaverLogin(){
     var xhr,url='/auth/naver',data=null;
@@ -41,7 +104,6 @@ function goNaverLogin(){
     xhr.onload = function() { 
         if(xhr.status==200){ // success:function(data)부분 통신 성공시 200반환
         location.href=xhr.response;
-        alert('sd');
         }else{
             alert('통신에 실패했습니다');
         }

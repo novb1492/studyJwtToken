@@ -14,13 +14,14 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.jwttoken.config.principaldetail;
 import com.example.jwttoken.model.userDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+
 
 public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
     
@@ -70,9 +71,10 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
         
                 response.setHeader("Authorization", "Bearer "+jwtToken);
 
-                RequestDispatcher dispatcher=request.getRequestDispatcher("/auth/home4"); 
+                RequestDispatcher dispatcher=request.getRequestDispatcher("/auth/auth"); 
         
                 try {
+
                     dispatcher.forward(request, response);
                 } catch (ServletException e) {
                     e.printStackTrace();

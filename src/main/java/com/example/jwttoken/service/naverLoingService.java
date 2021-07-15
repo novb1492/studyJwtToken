@@ -14,6 +14,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.example.jwttoken.config.security;
 import com.example.jwttoken.jwt.jwtGetTokenService;
+import com.example.jwttoken.jwt.jwtLoginFilter;
 import com.example.jwttoken.model.naverDto;
 import com.example.jwttoken.model.userDao;
 import com.example.jwttoken.model.userDto;
@@ -47,6 +48,7 @@ public class naverLoingService   {
     private security security;
     @Autowired
     private jwtGetTokenService jwtGetTokenService;
+  
 
     public String naverLogin() {
         String state="";
@@ -97,20 +99,24 @@ public class naverLoingService   {
                SecurityContextHolder.getContext().setAuthentication(authentication);
                System.out.println(jwtToken+" 토큰");
 
-       
-               RequestDispatcher dispatcher=request.getRequestDispatcher("/auth2"); 
                request.setAttribute("test", jwtToken);
                request.setAttribute("test2", "1111");
-               response.setHeader("test3", jwtToken);
+               response.setHeader("Authorization", "Bearer "+jwtToken);
                HttpSession httpSession=request.getSession(true);
                httpSession.setAttribute("testsession", jwtToken);
-                try {
-                    dispatcher.forward(request, response);
-                } catch (ServletException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+               
+               /*RequestDispatcher dispatcher=request.getRequestDispatcher("/auth/home4"); 
+        
+               try {
+                   dispatcher.forward(request, response);
+               } catch (ServletException e) {
+                   e.printStackTrace();
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }*/
+               
+              
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("LoginNaver 오류가 발생 했습니다");
