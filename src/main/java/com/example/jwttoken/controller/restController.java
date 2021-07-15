@@ -25,7 +25,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -101,6 +100,18 @@ public class restController {
         System.out.println(request.getParameter("test"));
         System.out.println(a.get(0));
         return "listtest";
+    }
+    @RequestMapping("/api/v1/user/test")
+    public String  usertest() {
+        return "user";
+    }
+    @RequestMapping("/api/v1/manage/test")
+    public String  mangetest() {
+        return "mange";
+    }
+    @RequestMapping("/api/v1/admin/test")
+    public String  admintest() {
+        return "admin";
     }
    
 }

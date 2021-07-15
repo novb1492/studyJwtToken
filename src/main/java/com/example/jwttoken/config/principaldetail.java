@@ -25,6 +25,7 @@ public class principaldetail implements UserDetails {
         collet.add(new GrantedAuthority(){
             @Override
             public String getAuthority() {
+                System.out.println(userDto.getRole()+"권한 가져오기");
                 return userDto.getRole();
             }
         });

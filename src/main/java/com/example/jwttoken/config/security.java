@@ -53,11 +53,11 @@ public class security extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/","/auth/**","/login")////이 링크들은
         .permitAll()///허용한다
-        .antMatchers("/api/v1/user")
+        .antMatchers("/api/v1/user/**")
         .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGE') or hasRole('ROLE_ADMIN')")
-        .antMatchers("/api/v1/mange")
+        .antMatchers("/api/v1/manage/**")
         .access("hasRole('ROLE_MANAGE') or hasRole('ROLE_ADMIN')")
-        .antMatchers("/api/v1/admin")
+        .antMatchers("/api/v1/admin/**")
         .access("hasRole('ROLE_ADMIN')")
         .anyRequest()///그외 다른 요청운
         .authenticated();//인증이있어야한다(로그인) 

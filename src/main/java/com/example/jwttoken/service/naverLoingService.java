@@ -1,20 +1,17 @@
 package com.example.jwttoken.service;
 
-import java.io.IOException;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
+import com.example.jwttoken.config.principaldetail;
 import com.example.jwttoken.config.security;
 import com.example.jwttoken.jwt.jwtGetTokenService;
-import com.example.jwttoken.jwt.jwtLoginFilter;
 import com.example.jwttoken.model.naverDto;
 import com.example.jwttoken.model.userDao;
 import com.example.jwttoken.model.userDto;
@@ -90,8 +87,8 @@ public class naverLoingService   {
                 dao.save(userDto);
  
                }
-    
-               Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, "1111"));
+               principaldetail principaldetail=new principaldetail(dto);
+               Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, "1111",principaldetail.getAuthorities()));
                
                System.out.println("토큰 발급시작");
 
