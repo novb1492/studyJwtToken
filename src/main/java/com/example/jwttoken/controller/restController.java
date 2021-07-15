@@ -83,5 +83,9 @@ public class restController {
     public String  admintest() {
         return "admin";
     }
+    @RequestMapping("/auth/gettoken")
+    public void  authGetHead(HttpServletRequest request,HttpServletResponse response) {
+        System.out.println(request.getHeader("Authorization"));
+    }
    
 }
