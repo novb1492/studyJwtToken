@@ -8,6 +8,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -88,16 +89,21 @@ public class naverLoingService   {
  
                }
     
-               UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(dto.getEmail()  , "1111");
-               Authentication authentication=authenticationManager.authenticate(authenticationToken);////토큰을 던지면 loadUserByUsername가 실행됨
+               Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, "1111"));
+               
                System.out.println("토큰 발급시작");
 
                String jwtToken=jwtGetTokenService.getJwtToken(authentication);
+               SecurityContextHolder.getContext().setAuthentication(authentication);
                System.out.println(jwtToken+" 토큰");
-            
-               RequestDispatcher dispatcher=request.getRequestDispatcher("/auth/auth"); 
+
+       
+               RequestDispatcher dispatcher=request.getRequestDispatcher("/auth2"); 
                request.setAttribute("test", jwtToken);
                request.setAttribute("test2", "1111");
+               response.setHeader("test3", jwtToken);
+               HttpSession httpSession=request.getSession(true);
+               httpSession.setAttribute("testsession", jwtToken);
                 try {
                     dispatcher.forward(request, response);
                 } catch (ServletException e) {

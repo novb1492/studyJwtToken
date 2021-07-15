@@ -48,7 +48,7 @@ public class security extends WebSecurityConfigurerAdapter {
         .addFilter(corsFilter)
         .formLogin().disable()
         .httpBasic().disable()
-        //.addFilter(new jwtAuthorizationFilter(authenticationManager(), dao))
+        .addFilter(new jwtAuthorizationFilter(authenticationManager(), dao))
         .addFilter(new jwtLoginFilter(authenticationManager()))
         .authorizeRequests()
         .antMatchers("/","/auth/**","/login")////이 링크들은

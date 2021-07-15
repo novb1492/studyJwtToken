@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.example.jwttoken.config.principaldetail;
 import com.example.jwttoken.service.naverLoingService;
@@ -32,8 +33,8 @@ public class controller {
     }
     @GetMapping("/auth2")
     public String auth2(HttpServletRequest request,@AuthenticationPrincipal principaldetail principaldetail) {
-        System.out.println("입장");
-        System.out.println(request.getHeader("Authorization")+principaldetail.getUsername()+"입장");
+        System.out.println("auth2 입장");
+        System.out.println(principaldetail.getUsername()+"입장");
         return "auth2page";
     }
     
@@ -42,8 +43,6 @@ public class controller {
     public String name(HttpServletRequest request,HttpServletResponse response) {
         System.out.println("home4");
         System.out.println(request.getParameter("test2"));
-   
-     
 
         return "auth2page";
     }

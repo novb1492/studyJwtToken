@@ -47,11 +47,9 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
             userDto userDto=objectMapper.readValue(request.getInputStream(), userDto.class);
             System.out.println(userDto);
             
-            UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPwd());
-            Authentication authentication=authenticationManager.authenticate(authenticationToken);////토큰을 던지면 loadUserByUsername가 실행됨
-
-            principaldetail principaldetail=(principaldetail)authentication.getPrincipal();
-            System.out.println("로그인완료"+principaldetail.getUserDto().getEmail());
+            Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getEmail(), "1111"));
+            
+            System.out.println("로그인완료"+authentication.getName());
 
             return authentication;
         } catch (IOException e) {
