@@ -1,13 +1,13 @@
 package com.example.jwttoken.service;
 
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 
 import com.example.jwttoken.config.principaldetail;
 import com.example.jwttoken.config.security;
@@ -97,25 +97,8 @@ public class naverLoingService   {
                System.out.println(jwtToken+" 토큰");
 
                jwtGetTokenService.insertJwtToken("Bearer "+jwtToken);
-
-               request.setAttribute("test", jwtToken);
-               request.setAttribute("test2", "1111");
                response.setHeader("Authorization", "Bearer "+jwtToken);
-               HttpSession httpSession=request.getSession(true);
-               httpSession.setAttribute("testsession", jwtToken);
-
-               
-               /*RequestDispatcher dispatcher=request.getRequestDispatcher("/auth/home4"); 
-        
-               try {
-                   dispatcher.forward(request, response);
-               } catch (ServletException e) {
-                   e.printStackTrace();
-               } catch (IOException e) {
-                   e.printStackTrace();
-               }*/
-               
-              
+                 
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("LoginNaver 오류가 발생 했습니다");

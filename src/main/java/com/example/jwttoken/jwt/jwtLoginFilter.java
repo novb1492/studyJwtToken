@@ -69,7 +69,7 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
 
                 principaldetail principaldetail=(principaldetail)authResult.getPrincipal();
                 
-                String jwtToken=JWT.create().withSubject("cos").withExpiresAt(new Date(System.currentTimeMillis()+(60000*10)))
+                String jwtToken=JWT.create().withSubject("cos").withExpiresAt(new Date(System.currentTimeMillis()+1000))
                 .withClaim("id",principaldetail.getUserDto().getId()).withClaim("username", principaldetail.getUserDto().getEmail()).sign(Algorithm.HMAC512("cos"));
         
                 getTokenService.insertJwtToken("Bearer "+jwtToken);

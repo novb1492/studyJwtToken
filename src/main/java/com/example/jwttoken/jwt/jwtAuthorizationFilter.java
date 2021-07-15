@@ -39,28 +39,29 @@ public class jwtAuthorizationFilter extends BasicAuthenticationFilter {
             if(getTokenService.findTokenAtDb(request.getHeader("Authorization"))!=null){
                 String jwtToken=request.getHeader("Authorization").replace("Bearer ", "");
                 System.out.println(jwtToken+"토큰받음");
-                
-                String username=JWT.require(Algorithm.HMAC512("cos")).build().verify(jwtToken).getClaim("username").asString();
-                System.out.println(username+"토큰해제");
-                response.setHeader("test", "test");
-                if(username!=null){
-                    System.out.println("인증이 요청되는");
-                    userDto userDto=dao.findByEmail(username);
-                    principaldetail principaldetail=new principaldetail(userDto);
-        
-                    System.out.println(userDto.getEmail());
-                    System.out.println(principaldetail.getAuthorities());
-                    
-                    Authentication authentication=new UsernamePasswordAuthenticationToken(principaldetail, null,principaldetail.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                    chain.doFilter(request, response);
+                try {
+                    String username=JWT.require(Algorithm.HMAC512("cos")).build().verify(jwtToken).getClaim("username").asString();
+                    System.out.println(username+"토큰해제");
+                    response.setHeader("test", "test");
+                    if(username!=null){
+                        System.out.println("인증이 요청되는");
+                        userDto userDto=dao.findByEmail(username);
+                        principaldetail principaldetail=new principaldetail(userDto);
+            
+                        System.out.println(userDto.getEmail());
+                        System.out.println(principaldetail.getAuthorities());
+                        
+                        Authentication authentication=new UsernamePasswordAuthenticationToken(principaldetail, null,principaldetail.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                        chain.doFilter(request, response);
+                    }   
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
+            System.out.print("토큰만료");
             chain.doFilter(request, response);
-        }
-        
-
-       
+        } 
     }
     
 }
