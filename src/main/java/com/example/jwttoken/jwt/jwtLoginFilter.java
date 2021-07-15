@@ -14,7 +14,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.jwttoken.config.principaldetail;
 import com.example.jwttoken.model.userDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,11 +24,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
     
-    @Autowired
+
     private AuthenticationManager authenticationManager;
 
-    public jwtLoginFilter(AuthenticationManager authenticationManager){
+    private jwtGetTokenService getTokenService;
+
+    public jwtLoginFilter(AuthenticationManager authenticationManager,jwtGetTokenService getTokenService){
         this.authenticationManager=authenticationManager;
+        this.getTokenService=getTokenService;
     }
 
     //login 요청시 얘가 로그인을 진행해준다
@@ -70,6 +72,7 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
                 String jwtToken=JWT.create().withSubject("cos").withExpiresAt(new Date(System.currentTimeMillis()+(60000*10)))
                 .withClaim("id",principaldetail.getUserDto().getId()).withClaim("username", principaldetail.getUserDto().getEmail()).sign(Algorithm.HMAC512("cos"));
         
+                getTokenService.insertJwtToken("Bearer "+jwtToken);
                 response.setHeader("Authorization", "Bearer "+jwtToken);
 
                 RequestDispatcher dispatcher=request.getRequestDispatcher("/auth/auth"); 

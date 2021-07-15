@@ -1,9 +1,9 @@
 package com.example.jwttoken.config;
 
 import com.example.jwttoken.jwt.jwtAuthorizationFilter;
+import com.example.jwttoken.jwt.jwtGetTokenService;
 import com.example.jwttoken.jwt.jwtLoginFilter;
 import com.example.jwttoken.model.userDao;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +28,9 @@ public class security extends WebSecurityConfigurerAdapter {
     private CorsFilter corsFilter;
     @Autowired
     private userDao dao;
+    @Autowired
+    private jwtGetTokenService getTokenService;
+
 
     @Bean
     @Override
@@ -48,8 +51,8 @@ public class security extends WebSecurityConfigurerAdapter {
         .addFilter(corsFilter)
         .formLogin().disable()
         .httpBasic().disable()
-        .addFilter(new jwtAuthorizationFilter(authenticationManager(), dao))
-        .addFilter(new jwtLoginFilter(authenticationManager()))
+        .addFilter(new jwtAuthorizationFilter(authenticationManager(), dao,getTokenService))
+        .addFilter(new jwtLoginFilter(authenticationManager(),getTokenService))
         .authorizeRequests()
         .antMatchers("/","/auth/**","/login")////이 링크들은
         .permitAll()///허용한다

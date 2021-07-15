@@ -96,6 +96,8 @@ public class naverLoingService   {
                SecurityContextHolder.getContext().setAuthentication(authentication);
                System.out.println(jwtToken+" 토큰");
 
+               jwtGetTokenService.insertJwtToken("Bearer "+jwtToken);
+
                request.setAttribute("test", jwtToken);
                request.setAttribute("test2", "1111");
                response.setHeader("Authorization", "Bearer "+jwtToken);
