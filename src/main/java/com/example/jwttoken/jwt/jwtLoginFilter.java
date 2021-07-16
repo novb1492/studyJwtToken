@@ -67,16 +67,15 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,Authentication authResult) throws IOException, ServletException {
                 System.out.println("토큰 제작시작");
 
+
                 principaldetail principaldetail=(principaldetail)authResult.getPrincipal();
+                String jwtToken=getTokenService.getJwtToken(principaldetail);
+                String refeshToken=getTokenService.getRefreshToken();
                 
-                String jwtToken=JWT.create().withSubject("cos").withExpiresAt(new Date(System.currentTimeMillis()+1000))
-                .withClaim("id",principaldetail.getUserDto().getId()).withClaim("username", principaldetail.getUserDto().getEmail()).sign(Algorithm.HMAC512("cos"));
-        
-                getTokenService.insertJwtToken("Bearer "+jwtToken);
+                getTokenService.insertRefreshToken("Bearer "+refeshToken,principaldetail.getUserDto().getEmail());
                 response.setHeader("Authorization", "Bearer "+jwtToken);
 
                 RequestDispatcher dispatcher=request.getRequestDispatcher("/auth/auth"); 
-        
                 try {
 
                     dispatcher.forward(request, response);

@@ -89,14 +89,16 @@ public class naverLoingService   {
                }
                principaldetail principaldetail=new principaldetail(dto);
                Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, "1111",principaldetail.getAuthorities()));
-               
+            
                System.out.println("토큰 발급시작");
 
-               String jwtToken=jwtGetTokenService.getJwtToken(authentication);
+               String jwtToken=jwtGetTokenService.getJwtToken(principaldetail);
                SecurityContextHolder.getContext().setAuthentication(authentication);
+               String refeshToken=jwtGetTokenService.getRefreshToken();
+               jwtGetTokenService.insertRefreshToken("Bearer "+refeshToken,principaldetail.getUserDto().getEmail());
                System.out.println(jwtToken+" 토큰");
 
-               jwtGetTokenService.insertJwtToken("Bearer "+jwtToken);
+               response.setHeader("refreshToken", refeshToken);
                response.setHeader("Authorization", "Bearer "+jwtToken);
                  
         } catch (Exception e) {
