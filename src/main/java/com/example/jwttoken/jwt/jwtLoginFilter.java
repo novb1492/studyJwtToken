@@ -41,7 +41,7 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
             String input=null;
             while((input=bufferedReader.readLine())!=null){
                 System.out.println(input);
-            }*/// 원시적인 방법 json(x)
+            }*/// 원시적인 방법 
             ObjectMapper objectMapper=new ObjectMapper();
             userDto userDto=objectMapper.readValue(request.getInputStream(), userDto.class);
             System.out.println(userDto);
