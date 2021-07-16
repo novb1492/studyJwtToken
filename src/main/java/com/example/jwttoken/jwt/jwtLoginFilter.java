@@ -1,16 +1,11 @@
 package com.example.jwttoken.jwt;
 
 import java.io.IOException;
-import java.util.Date;
-
 import javax.servlet.FilterChain;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.example.jwttoken.config.principaldetail;
 import com.example.jwttoken.model.userDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
