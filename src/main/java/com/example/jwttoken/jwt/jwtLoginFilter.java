@@ -69,7 +69,8 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
                 
                 getTokenService.insertRefreshToken("Bearer "+refeshToken,principaldetail.getUserDto().getEmail());
                 response.setHeader("Authorization", "Bearer "+jwtToken);
-
+                response.setHeader("refreshToken", refeshToken);
+                
                 RequestDispatcher dispatcher=request.getRequestDispatcher("/auth/auth"); 
                 try {
 
