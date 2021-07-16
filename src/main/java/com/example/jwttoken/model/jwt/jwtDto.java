@@ -32,6 +32,7 @@ public class jwtDto {
 
     @Column(name = "email",nullable = false)
     private String email;
+    
 
     @Column(name="created")
     @CreationTimestamp  

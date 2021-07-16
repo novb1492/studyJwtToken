@@ -1,11 +1,15 @@
 package com.example.jwttoken.jwt;
 
 import java.io.IOException;
+
+
 import javax.servlet.FilterChain;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+
 import com.example.jwttoken.config.principaldetail;
 import com.example.jwttoken.model.userDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -62,14 +66,13 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,Authentication authResult) throws IOException, ServletException {
                 System.out.println("토큰 제작시작");
 
-
                 principaldetail principaldetail=(principaldetail)authResult.getPrincipal();
                 String jwtToken=getTokenService.getJwtToken(principaldetail);
                 String refeshToken=getTokenService.getRefreshToken();
                 
                 getTokenService.insertRefreshToken("Bearer "+refeshToken,principaldetail.getUserDto().getEmail());
                 response.setHeader("Authorization", "Bearer "+jwtToken);
-                response.setHeader("refreshToken", refeshToken);
+                response.setHeader("refreshToken","Bearer "+refeshToken);
                 
                 RequestDispatcher dispatcher=request.getRequestDispatcher("/auth/auth"); 
                 try {
@@ -79,7 +82,7 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+                }          
     }
     
 }

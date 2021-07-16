@@ -12,6 +12,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.jwttoken.config.principaldetail;
 import com.example.jwttoken.model.userDao;
 import com.example.jwttoken.model.userDto;
+import com.example.jwttoken.model.jwt.jwtDto;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,8 +37,7 @@ public class jwtAuthorizationFilter extends BasicAuthenticationFilter {
       
         if(request.getHeader("Authorization")==null||!request.getHeader("Authorization").startsWith("Bearer")){
             chain.doFilter(request, response);
-        }else{
-            if(getTokenService.findTokenAtDb(request.getHeader("Authorization"))!=null){
+        }else{ 
                 String jwtToken=request.getHeader("Authorization").replace("Bearer ", "");
                 System.out.println(jwtToken+"토큰받음");
                 try {
@@ -57,10 +58,20 @@ public class jwtAuthorizationFilter extends BasicAuthenticationFilter {
                     }   
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println("토큰 시간이 만료됨");
+                    String refreshToken=request.getHeader("refreshToken");
+                    String email=getTokenService.getRefreshToken(refreshToken);
+                    if(email!=null){
+                        System.out.println("리프레시 토큰 확인 완료");
+                        userDto dto=dao.findByEmail(email);
+                        Authentication authentication =getTokenService.getAuthentication(email, dto);
+                        principaldetail principaldetail=new principaldetail(dto);
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                        String newJwtToken=getTokenService.getJwtToken(principaldetail);
+                        response.setHeader("Authorization", "Bearer "+jwtToken);
+                        chain.doFilter(request, response);
+                    }
                 }
-            }
-            System.out.print("토큰만료");
-            chain.doFilter(request, response);
         } 
     }
     
