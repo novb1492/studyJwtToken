@@ -52,7 +52,7 @@ public class security extends WebSecurityConfigurerAdapter {
         .formLogin().disable()
         .httpBasic().disable()
         .addFilter(new jwtAuthorizationFilter(authenticationManager(), dao,getTokenService))
-        .addFilter(new jwtLoginFilter(authenticationManager(),getTokenService))
+        .addFilter(new jwtLoginFilter(getTokenService))
         .authorizeRequests()
         .antMatchers("/","/auth/**","/login")////이 링크들은
         .permitAll()///허용한다

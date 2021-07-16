@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-import com.example.jwttoken.config.principaldetail;
+
 import com.example.jwttoken.config.security;
 import com.example.jwttoken.jwt.jwtGetTokenService;
 import com.example.jwttoken.model.naverDto;
@@ -19,8 +19,6 @@ import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,8 +35,6 @@ public class naverLoingService   {
     private RestTemplate restTemplate=new RestTemplate();
     private HttpHeaders headers=new HttpHeaders();
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
     @Autowired
     private userDao dao;
     @Autowired
@@ -87,18 +83,17 @@ public class naverLoingService   {
                 dao.save(userDto);
  
                }
-               principaldetail principaldetail=new principaldetail(dto);
-               Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, "1111",principaldetail.getAuthorities()));
+               Authentication authentication=jwtGetTokenService.getAuthentication(dto);
             
                System.out.println("토큰 발급시작");
 
-               String jwtToken=jwtGetTokenService.getJwtToken(principaldetail);
+               String jwtToken=jwtGetTokenService.getJwtToken(dto.getEmail());
                SecurityContextHolder.getContext().setAuthentication(authentication);
                String refeshToken=jwtGetTokenService.getRefreshToken();
-               jwtGetTokenService.insertRefreshToken("Bearer "+refeshToken,principaldetail.getUserDto().getEmail());
+               jwtGetTokenService.insertRefreshToken("Bearer "+refeshToken,dto.getEmail());
                System.out.println(jwtToken+" 토큰");
 
-               response.setHeader("refreshToken", refeshToken);
+               response.setHeader("refreshToken","Bearer "+refeshToken);
                response.setHeader("Authorization", "Bearer "+jwtToken);
                  
         } catch (Exception e) {

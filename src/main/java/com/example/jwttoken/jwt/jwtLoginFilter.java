@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.example.jwttoken.config.principaldetail;
 import com.example.jwttoken.model.userDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -24,12 +22,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
     
 
-    private AuthenticationManager authenticationManager;
+   
 
     private jwtGetTokenService getTokenService;
 
-    public jwtLoginFilter(AuthenticationManager authenticationManager,jwtGetTokenService getTokenService){
-        this.authenticationManager=authenticationManager;
+    public jwtLoginFilter(jwtGetTokenService getTokenService){
         this.getTokenService=getTokenService;
     }
 
@@ -49,8 +46,7 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
             userDto userDto=objectMapper.readValue(request.getInputStream(), userDto.class);
             System.out.println(userDto);
             
-            principaldetail principaldetail=new principaldetail(userDto);
-            Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getEmail(), "1111",principaldetail.getAuthorities()));
+            Authentication authentication=getTokenService.getAuthentication(userDto);
             
             System.out.println("로그인완료"+authentication.getName());
 
@@ -67,7 +63,7 @@ public class jwtLoginFilter extends UsernamePasswordAuthenticationFilter  {
                 System.out.println("토큰 제작시작");
 
                 principaldetail principaldetail=(principaldetail)authResult.getPrincipal();
-                String jwtToken=getTokenService.getJwtToken(principaldetail);
+                String jwtToken=getTokenService.getJwtToken(principaldetail.getUserDto().getEmail());
                 String refeshToken=getTokenService.getRefreshToken();
                 
                 getTokenService.insertRefreshToken("Bearer "+refeshToken,principaldetail.getUserDto().getEmail());

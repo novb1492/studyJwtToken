@@ -23,12 +23,12 @@ public class jwtGetTokenService {
     @Autowired
     private AuthenticationManager authenticationManager;
     
-    public String getJwtToken(principaldetail principaldetail) {
+    public String getJwtToken(String email) {
         
         System.out.println("토큰 제작시작");
        
         return JWT.create().withSubject("cos").withExpiresAt(new Date(System.currentTimeMillis()+1000))
-        .withClaim("username", principaldetail.getUserDto().getEmail()).sign(Algorithm.HMAC512("cos"));
+        .withClaim("username",email).sign(Algorithm.HMAC512("cos"));
     }
     public void insertRefreshToken(String tokenName,String email) {
         try {
@@ -63,8 +63,8 @@ public class jwtGetTokenService {
         System.out.println("리프레시 토큰이 존재하지 않습니다");
         return null;
     }
-    public Authentication getAuthentication(String email,userDto dto) {
+    public Authentication getAuthentication(userDto dto) {
         principaldetail principaldetail=new principaldetail(dto);
-        return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, "1111",principaldetail.getAuthorities()));
+        return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getEmail(), "1111",principaldetail.getAuthorities()));
     }
 }

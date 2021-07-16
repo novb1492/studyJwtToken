@@ -12,8 +12,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.example.jwttoken.config.principaldetail;
 import com.example.jwttoken.model.userDao;
 import com.example.jwttoken.model.userDto;
-import com.example.jwttoken.model.jwt.jwtDto;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -64,11 +62,13 @@ public class jwtAuthorizationFilter extends BasicAuthenticationFilter {
                     if(email!=null){
                         System.out.println("리프레시 토큰 확인 완료");
                         userDto dto=dao.findByEmail(email);
-                        Authentication authentication =getTokenService.getAuthentication(email, dto);
-                        principaldetail principaldetail=new principaldetail(dto);
+
+                        Authentication authentication=getTokenService.getAuthentication(dto);
+                        String newJwtToken=getTokenService.getJwtToken(dto.getEmail());
+
                         SecurityContextHolder.getContext().setAuthentication(authentication);
-                        String newJwtToken=getTokenService.getJwtToken(principaldetail);
-                        response.setHeader("Authorization", "Bearer "+jwtToken);
+                        response.setHeader("Authorization", "Bearer "+newJwtToken);
+                        response.setHeader("refreshToken", refreshToken);
                         chain.doFilter(request, response);
                     }
                 }
